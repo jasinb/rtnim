@@ -4,19 +4,20 @@ import std/math
 
 proc hitSphere(center: Vec3, radius: float, r: Ray): float =
     let oc = r.origin - center
-    let a = dot(r.dir, r.dir)
-    let b = 2.0 * dot(oc, r.dir)
-    let c = dot(oc, oc) - radius*radius
-    let discriminant = b*b - 4.0*a*c
+    let a = r.dir.lengthSquared
+    let half_b = dot(oc, r.dir)
+    let c = oc.lengthSquared - radius*radius
+    let discriminant = half_b*half_b - a*c
     if discriminant < 0:
         return -1.0
 
-    result = (-b - sqrt(discriminant)) / (2.0 * a)
+    result = (-half_b - sqrt(discriminant)) / a
 
 proc rayColor(r: Ray): Vec3 =
-    var t = hitSphere(Vec3(x: 0.0, y: 0.0, z: -1.0), 0.5, r)
+    let sphereOrigin = Vec3(x: 0.0, y: 0.0, z: -1.0) 
+    var t = hitSphere(sphereOrigin, 0.5, r)
     if t > 0.0:
-        let normal = (r.at(t) - Vec3(x: 0.0, y: 0.0, z: -1.0)).unit
+        let normal = (r.at(t) - sphereOrigin).unit # simply a vector from sphere center to the surface
         return 0.5 * (normal + Vec3(x: 1.0, y: 1.0, z: 1.0))
 
     let u = r.dir.unit
