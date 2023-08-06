@@ -1,21 +1,27 @@
 import vec3
 import ray
+import std/math
 
-proc hitSphere(center: Vec3, radius: float, r: Ray): bool =
+proc hitSphere(center: Vec3, radius: float, r: Ray): float =
     let oc = r.origin - center
     let a = dot(r.dir, r.dir)
     let b = 2.0 * dot(oc, r.dir)
     let c = dot(oc, oc) - radius*radius
     let discriminant = b*b - 4.0*a*c
-    result = discriminant > 0
+    if discriminant < 0:
+        return -1.0
+
+    result = (-b - sqrt(discriminant)) / (2.0 * a)
 
 proc rayColor(r: Ray): Vec3 =
-    if (hitSphere(Vec3(x: 0.0, y: 0.0, z: -1.0), 0.5, r)):
-        return Vec3(x: 1.0, y: 0.0, z: 0.0)
+    var t = hitSphere(Vec3(x: 0.0, y: 0.0, z: -1.0), 0.5, r)
+    if t > 0.0:
+        let normal = (r.at(t) - Vec3(x: 0.0, y: 0.0, z: -1.0)).unit
+        return 0.5 * (normal + Vec3(x: 1.0, y: 1.0, z: 1.0))
+
     let u = r.dir.unit
-    let t = 0.5 * u.y + 1.0
-    result = (1.0 - t) * Vec3(x: 1.0, y: 1.0, z: 1.0) + t * Vec3(x: 0.5, y: 0.7, z: 1.0)
-    
+    t = 0.5 * (u.y + 1.0)
+    result = (1.0 - t) * Vec3(x: 1.0, y: 1.0, z: 1.0) + t * Vec3(x: 0.5, y: 0.7, z: 1.0)    
 
 const image_width = 400
 
