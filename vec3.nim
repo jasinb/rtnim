@@ -9,6 +9,10 @@ type
 proc `+` *(a, b: Vec3): Vec3 =
     Vec3(x: a.x + b.x, y: a.y + b.y, z: a.z + b.z)
 
+
+proc `-` *(v: Vec3): Vec3 =
+    Vec3(x: -v.x, y: -v.y, z: -v.z)
+
 proc `-` *(a, b: Vec3): Vec3 =
     Vec3(x: a.x - b.x, y: a.y - b.y, z: a.z - b.z)
 

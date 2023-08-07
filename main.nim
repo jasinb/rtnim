@@ -1,27 +1,20 @@
 import vec3
 import ray
 import std/math
+import sphere
+import hittable
 
-proc hitSphere(center: Vec3, radius: float, r: Ray): float =
-    let oc = r.origin - center
-    let a = r.dir.lengthSquared
-    let half_b = dot(oc, r.dir)
-    let c = oc.lengthSquared - radius*radius
-    let discriminant = half_b*half_b - a*c
-    if discriminant < 0:
-        return -1.0
-
-    result = (-half_b - sqrt(discriminant)) / a
+let smallSphere = Sphere(center: Vec3(x: 0.0, y: 0.0, z: -1.0), radius: 0.5)
 
 proc rayColor(r: Ray): Vec3 =
     let sphereOrigin = Vec3(x: 0.0, y: 0.0, z: -1.0) 
-    var t = hitSphere(sphereOrigin, 0.5, r)
-    if t > 0.0:
-        let normal = (r.at(t) - sphereOrigin).unit # simply a vector from sphere center to the surface
+    var hitRecord = HitRecord()
+    if smallSphere.hit(r, 0, Inf, hitRecord):
+        let normal = (r.at(hitRecord.t) - sphereOrigin).unit # simply a vector from sphere center to the surface
         return 0.5 * (normal + Vec3(x: 1.0, y: 1.0, z: 1.0))
 
     let u = r.dir.unit
-    t = 0.5 * (u.y + 1.0)
+    let t = 0.5 * (u.y + 1.0)
     result = (1.0 - t) * Vec3(x: 1.0, y: 1.0, z: 1.0) + t * Vec3(x: 0.5, y: 0.7, z: 1.0)    
 
 const image_width = 400
