@@ -4,14 +4,20 @@ import std/math
 import sphere
 import hittable
 
-let smallSphere = Sphere(center: Vec3(x: 0.0, y: 0.0, z: -1.0), radius: 0.5)
 
-proc rayColor(r: Ray): Vec3 =
-    let sphereOrigin = Vec3(x: 0.0, y: 0.0, z: -1.0) 
-    var hitRecord = HitRecord()
-    if smallSphere.hit(r, 0, Inf, hitRecord):
-        let normal = (r.at(hitRecord.t) - sphereOrigin).unit # simply a vector from sphere center to the surface
-        return 0.5 * (normal + Vec3(x: 1.0, y: 1.0, z: 1.0))
+let smallSphere = Sphere(center: Vec3(x: 0.0, y: 0.0, z: -1.0), radius: 0.5)
+let largeSphere = Sphere(center: Vec3(x: 0.0, y: -100.5, z: -1.0), radius: 100)
+
+var hitList: HittableList = HittableList(objects: @[])
+
+hitList.clear()
+hitList.add(smallSphere)
+hitList.add(largeSphere)
+
+proc rayColor(r: Ray, world: Hittable): Vec3 =
+    var hitRecord: HitRecord
+    if world.hit(r, 0, Inf, hitRecord):
+        return 0.5 * (hitRecord.normal + Vec3(x: 1.0, y: 1.0, z: 1.0))
 
     let u = r.dir.unit
     let t = 0.5 * (u.y + 1.0)
@@ -41,5 +47,5 @@ for j in countdown(imageHeight - 1, 0):
         let v = j / (imageHeight - 1)
 
         let r = Ray(origin: origin, dir: lowerLeftCorner + u*horizontal + v*vertical - origin)
-        let c = r.rayColor
+        let c = r.rayColor(hitList)
         c.writeColor
