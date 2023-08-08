@@ -64,3 +64,8 @@ proc randVec3UnitSphere*(): Vec3 =
 
 proc randUnitVec3*(): Vec3 =
     randVec3UnitSphere().unit
+
+proc randHemisphere*(normal: Vec3): Vec3 =
+    result = randVec3UnitSphere()
+    if result.dot(normal) < 0.0:
+        return -result

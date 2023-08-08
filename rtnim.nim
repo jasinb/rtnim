@@ -24,7 +24,7 @@ proc rayColor(r: Ray, world: Hittable, depth: int): Vec3 =
 
     var rec: HitRecord
     if world.hit(r, 0.001, Inf, rec):
-        let target = rec.p + rec.normal + randUnitVec3()
+        let target = rec.p + randHemisphere(rec.normal)
         return 0.5 * rayColor(Ray(origin: rec.p, dir: target - rec.p), hitList, depth-1)
 
     # no hit, background gradient
