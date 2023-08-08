@@ -33,7 +33,6 @@ let cam = initCamera()
 
 echo "P3\n", imageWidth, ' ', imageHeight, "\n255"
 
-
 for j in countdown(imageHeight - 1, 0):
     if j mod 10 == 0:
         stderr.writeLine("Progress: ", 100.0 * (1.0 - j / imageHeight), '\r')
