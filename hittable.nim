@@ -7,11 +7,11 @@ type
     HitRecord* = object
         p*, normal*: Vec3
         t*: float
-        front_face: bool
+        frontFace: bool
 
-method hit*(h: Hittable, r: Ray, t_min, t_max: float, rec: var HitRecord): bool {. base .} =
+method hit*(h: Hittable, r: Ray, tMin, tMax: float, rec: var HitRecord): bool {. base .} =
     quit "Should be overridden!"
 
-proc setFaceNormal*(rec: var HitRecord, ray: Ray, outward_normal: Vec3) =
-    rec.front_face = ray.dir.dot(outward_normal) < 0.0
-    rec.normal = if rec.front_face: outward_normal else: -outward_normal
+proc setFaceNormal*(rec: var HitRecord, ray: Ray, outwardNormal: Vec3) =
+    rec.frontFace = ray.dir.dot(outwardNormal) < 0.0
+    rec.normal = if rec.frontFace: outwardNormal else: -outwardNormal
