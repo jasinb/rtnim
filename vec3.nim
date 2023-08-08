@@ -1,4 +1,5 @@
 import std/math
+import std/random
 type
     Vec3* = object
         x*: float
@@ -6,9 +7,14 @@ type
         z*: float
 
 
+proc initVec3*(x = 0.0, y = 0.0, z = 0.0): Vec3 =
+    Vec3(x: x, y: y, z: z)
+
+proc zeroVec3*(): Vec3 =
+    initVec3()
+
 proc `+` *(a, b: Vec3): Vec3 =
     Vec3(x: a.x + b.x, y: a.y + b.y, z: a.z + b.z)
-
 
 proc `-` *(v: Vec3): Vec3 =
     Vec3(x: -v.x, y: -v.y, z: -v.z)
@@ -39,8 +45,22 @@ proc unit* (v: Vec3): Vec3 =
 
 proc writeColor*(color: Vec3, samplesPerPixel: int) =
     let scale = 1 / samplesPerPixel
-    let r = color.x * scale
-    let g = color.y * scale
-    let b = color.z * scale
-    
+    # gamma = 2.0
+    let r = sqrt(color.x * scale)
+    let g = sqrt(color.y * scale)
+    let b = sqrt(color.z * scale)
+
     echo int(256 * clamp(r, 0.0, 0.999)), ' ', int(256 * clamp(g, 0.0, 0.999)), ' ', int(256 * clamp(b, 0.0, 0.999)), '\n'
+
+proc randVec3*(mn = -1.0, mx = 1.0): Vec3 =
+    let k = mx - mn
+    result = initVec3(mn + k*rand(1.0), mn + k*rand(1.0), mn + k*rand(1.0))
+
+proc randVec3UnitSphere*(): Vec3 =
+    while true:
+        let v = randVec3()
+        if v.lengthSquared < 1.0:
+            return v
+
+proc randUnitVec3*(): Vec3 =
+    randVec3UnitSphere().unit
