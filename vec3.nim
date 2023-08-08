@@ -37,5 +37,10 @@ proc length* (v: Vec3): float =
 proc unit* (v: Vec3): Vec3 =
     v / v.length;
 
-proc writeColor*(v: Vec3) =
-    echo int(v.x * 255.999), ' ', int(v.y * 255.999), ' ', int(v.z * 255.999), '\n'
+proc writeColor*(color: Vec3, samplesPerPixel: int) =
+    let scale = 1 / samplesPerPixel
+    let r = color.x * scale
+    let g = color.y * scale
+    let b = color.z * scale
+    
+    echo int(256 * clamp(r, 0.0, 0.999)), ' ', int(256 * clamp(g, 0.0, 0.999)), ' ', int(256 * clamp(b, 0.0, 0.999)), '\n'
