@@ -10,8 +10,8 @@ import metal
 
 let matGround = newLambertian(albedo = Vec3(x: 0.8, y: 0.8, z: 0.0))
 let matCenter = newLambertian(albedo = Vec3(x: 0.7, y: 0.3, z: 0.3))
-let matLeft = newMetal(albedo = Vec3(x: 0.8, y: 0.8, z: 0.8))
-let matRight = newMetal(albedo = Vec3(x: 0.8, y: 0.6, z: 0.2))
+let matLeft = newMetal(albedo = Vec3(x: 0.8, y: 0.8, z: 0.8), fuzz = 0.3)
+let matRight = newMetal(albedo = Vec3(x: 0.8, y: 0.6, z: 0.2), fuzz = 1.0)
 
 var hitList: HittableList = HittableList(objects: @[])
 hitList.add(Sphere(center: Vec3(x:  0.0, y: -100.5, z: -1.0), radius: 100.0, material: matGround))
