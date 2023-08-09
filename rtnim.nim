@@ -5,13 +5,16 @@ import hittable
 import camera
 import std/random
 import std/times
+import lambertian
+
+let mat = newLambertian(albedo = Vec3(x: 0.6, y: 0.5, z: 0.4))
+let mat2 = newLambertian(albedo = Vec3(x: 0.4, y: 0.5, z: 0.6))
 
 
-let smallSphere = Sphere(center: Vec3(x: 0.0, y: 0.0, z: -1.0), radius: 0.5)
-let largeSphere = Sphere(center: Vec3(x: 0.0, y: -100.5, z: -1.0), radius: 100)
+let smallSphere = Sphere(center: Vec3(x: 0.0, y: 0.0, z: -1.0), radius: 0.5, material: mat2)
+let largeSphere = Sphere(center: Vec3(x: 0.0, y: -100.5, z: -1.0), radius: 100, material: mat)
 
 var hitList: HittableList = HittableList(objects: @[])
-
 hitList.add(smallSphere)
 hitList.add(largeSphere)
 
@@ -24,8 +27,12 @@ proc rayColor(r: Ray, world: Hittable, depth: int): Vec3 =
 
     var rec: HitRecord
     if world.hit(r, 0.001, Inf, rec):
-        let target = rec.p + randHemisphere(rec.normal)
-        return 0.5 * rayColor(Ray(origin: rec.p, dir: target - rec.p), hitList, depth-1)
+        var scattered: Ray
+        var attenuation: Vec3
+        if rec.material.scatter(r, rec, attenuation, scattered):
+            return attenuation * rayColor(scattered, hitList, depth-1)
+    
+        return zeroVec3()
 
     # no hit, background gradient
     let u = r.dir.unit

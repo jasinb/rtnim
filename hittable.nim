@@ -6,10 +6,14 @@ type
         p*, normal*: Vec3
         t*: float
         frontFace: bool
+        material*: Material
 
     Hittable* = ref object of RootObj
     HittableList* = ref object of Hittable
         objects*: seq[Hittable]
+
+    # this shouldn't be here, but nim makes cyclic deps on types hard
+    Material* = ref object of RootObj
 
 proc setFaceNormal*(rec: var HitRecord, ray: Ray, outwardNormal: Vec3) =
     rec.frontFace = ray.dir.dot(outwardNormal) < 0.0
@@ -37,3 +41,5 @@ method hit*(hittableList: HittableList, r: Ray, tMin, tMax: float, rec: var HitR
 
     result = hitAnything
 
+method scatter*(m: Material, rayIn: Ray, rec: HitRecord, attenuation: var Vec3, scattered: var Ray): bool {. base .} =
+    quit "Should be overridden!"

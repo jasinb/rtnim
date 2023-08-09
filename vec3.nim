@@ -25,6 +25,10 @@ proc `-` *(a, b: Vec3): Vec3 =
 proc `*` *(v: Vec3, t: float): Vec3 =
     Vec3(x: v.x * t, y: v.y * t, z: v.z * t)
 
+# component wise multiplication
+proc `*` *(a: Vec3, b: Vec3): Vec3 =
+    Vec3(x: a.x * b.x, y: a.y * b.y, z: a.z * b.z)
+
 proc `*` *(t: float, v: Vec3): Vec3 =
     v * t
 
@@ -69,3 +73,7 @@ proc randHemisphere*(normal: Vec3): Vec3 =
     result = randVec3UnitSphere()
     if result.dot(normal) < 0.0:
         return -result
+
+proc nearZero*(v: Vec3): bool =
+    const epsilon = 1e-8
+    abs(v.x) < epsilon and abs(v.y) < epsilon and abs(v.z) < epsilon

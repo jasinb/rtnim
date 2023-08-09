@@ -7,6 +7,7 @@ type
     Sphere* = ref object of Hittable
         center*: Vec3
         radius*: float
+        material*: Material
 
 method hit*(sphere: Sphere, r: Ray, tMin, tMax: float, rec: var HitRecord): bool =
     let oc = r.origin - sphere.center
@@ -30,4 +31,5 @@ method hit*(sphere: Sphere, r: Ray, tMin, tMax: float, rec: var HitRecord): bool
     rec.p = r.at(rec.t)
     let outwardNormal = (rec.p - sphere.center) / sphere.radius 
     rec.setFaceNormal(r, outwardNormal)
+    rec.material = sphere.material
     result = true
