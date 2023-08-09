@@ -77,3 +77,6 @@ proc randHemisphere*(normal: Vec3): Vec3 =
 proc nearZero*(v: Vec3): bool =
     const epsilon = 1e-8
     abs(v.x) < epsilon and abs(v.y) < epsilon and abs(v.z) < epsilon
+
+proc reflect*(v, n: Vec3): Vec3 =
+    v - 2.0*dot(v, n)*n

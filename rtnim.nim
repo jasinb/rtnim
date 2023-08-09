@@ -6,17 +6,19 @@ import camera
 import std/random
 import std/times
 import lambertian
+import metal
 
-let mat = newLambertian(albedo = Vec3(x: 0.6, y: 0.5, z: 0.4))
-let mat2 = newLambertian(albedo = Vec3(x: 0.4, y: 0.5, z: 0.6))
-
-
-let smallSphere = Sphere(center: Vec3(x: 0.0, y: 0.0, z: -1.0), radius: 0.5, material: mat2)
-let largeSphere = Sphere(center: Vec3(x: 0.0, y: -100.5, z: -1.0), radius: 100, material: mat)
+let matGround = newLambertian(albedo = Vec3(x: 0.8, y: 0.8, z: 0.0))
+let matCenter = newLambertian(albedo = Vec3(x: 0.7, y: 0.3, z: 0.3))
+let matLeft = newMetal(albedo = Vec3(x: 0.8, y: 0.8, z: 0.8))
+let matRight = newMetal(albedo = Vec3(x: 0.8, y: 0.6, z: 0.2))
 
 var hitList: HittableList = HittableList(objects: @[])
-hitList.add(smallSphere)
-hitList.add(largeSphere)
+hitList.add(Sphere(center: Vec3(x:  0.0, y: -100.5, z: -1.0), radius: 100.0, material: matGround))
+hitList.add(Sphere(center: Vec3(x:  0.0, y:    0.0, z: -1.0), radius: 0.5, material: matCenter))
+hitList.add(Sphere(center: Vec3(x: -1.0, y:    0.0, z: -1.0), radius: 0.5, material: matLeft))
+hitList.add(Sphere(center: Vec3(x:  1.0, y:    0.0, z: -1.0), radius: 0.5, material: matRight))
+
 
 var rayCount = 0
 
