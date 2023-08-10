@@ -12,14 +12,21 @@ import dielectric
 let matGround = newLambertian(albedo = Vec3(x: 0.8, y: 0.8, z: 0.0))
 let matCenter = newLambertian(albedo = Vec3(x: 0.1, y: 0.2, z: 0.5))
 let matLeft = newDielectric(ir = 1.5)
-let matRight = newMetal(albedo = Vec3(x: 0.8, y: 0.6, z: 0.2), fuzz = 0.3)
+let matRight = newMetal(albedo = Vec3(x: 0.8, y: 0.6, z: 0.2), fuzz = 0.0)
 
 var hitList: HittableList = HittableList(objects: @[])
 hitList.add(Sphere(center: Vec3(x:  0.0, y: -100.5, z: -1.0), radius:  100.0, material: matGround))
 hitList.add(Sphere(center: Vec3(x:  0.0, y:    0.0, z: -1.0), radius:  0.5, material: matCenter))
 hitList.add(Sphere(center: Vec3(x: -1.0, y:    0.0, z: -1.0), radius:  0.5, material: matLeft))
-hitList.add(Sphere(center: Vec3(x: -1.0, y:    0.0, z: -1.0), radius: -0.4, material: matLeft))
+hitList.add(Sphere(center: Vec3(x: -1.0, y:    0.0, z: -1.0), radius: -0.45, material: matLeft))
 hitList.add(Sphere(center: Vec3(x:  1.0, y:    0.0, z: -1.0), radius:  0.5, material: matRight))
+
+let cam = initCamera(
+    initVec3(-2.0, 2.0, 1.0),   # origin
+    initVec3(0.0, 0.0, -1.0),   # lookat
+    initVec3(0.0, 1.0, 0.0),    # up
+    20.0,                       # fov
+    16.0 / 9.0)                 # aspect
 
 
 var rayCount = 0
@@ -49,7 +56,6 @@ const imageHeight = int(imageWidth / aspectRatio)
 const samplesPerPixel = 100
 const maxBounces = 50
 
-let cam = initCamera()
 
 echo "P3\n", imageWidth, ' ', imageHeight, "\n255"
 

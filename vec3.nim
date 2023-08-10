@@ -38,6 +38,12 @@ proc `/` *(v: Vec3, t: float): Vec3 =
 proc dot*(a: Vec3, b: Vec3): float =
     a.x*b.x + a.y*b.y + a.z*b.z
 
+proc cross*(u, v: Vec3): Vec3 =
+    initVec3(
+        u.y*v.z - u.z*v.y,
+        u.z*v.x - u.x*v.z,
+        u.x*v.y - u.y*v.x)
+
 proc lengthSquared* (v: Vec3): float =
     v.dot v
 
