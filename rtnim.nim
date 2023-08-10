@@ -21,13 +21,15 @@ hitList.add(Sphere(center: Vec3(x: -1.0, y:    0.0, z: -1.0), radius:  0.5, mate
 hitList.add(Sphere(center: Vec3(x: -1.0, y:    0.0, z: -1.0), radius: -0.45, material: matLeft))
 hitList.add(Sphere(center: Vec3(x:  1.0, y:    0.0, z: -1.0), radius:  0.5, material: matRight))
 
-let cam = initCamera(
-    initVec3(-2.0, 2.0, 1.0),   # origin
-    initVec3(0.0, 0.0, -1.0),   # lookat
-    initVec3(0.0, 1.0, 0.0),    # up
-    20.0,                       # fov
-    16.0 / 9.0)                 # aspect
+let camOrigin = initVec3(3.0, 3.0, 2.0)
+let camLookAt = initVec3(0.0, 0.0, -1.0)
+let camUp = initVec3(0.0, 1.0, 0.0)
+let camFov = 20.0
+const aspectRatio = 16 / 9
+let aperture = 2.0
+let distToFocus = (camLookAt-camOrigin).length
 
+let cam = initCamera(camOrigin, camLookAt, camUp, camFov, aspectRatio, aperture, distToFocus)
 
 var rayCount = 0
 
@@ -51,7 +53,6 @@ proc rayColor(r: Ray, world: Hittable, depth: int): Vec3 =
     result = (1.0 - t) * Vec3(x: 1.0, y: 1.0, z: 1.0) + t * Vec3(x: 0.5, y: 0.7, z: 1.0)    
 
 const imageWidth = 400
-const aspectRatio = 16 / 9
 const imageHeight = int(imageWidth / aspectRatio)
 const samplesPerPixel = 100
 const maxBounces = 50

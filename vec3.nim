@@ -72,6 +72,13 @@ proc randVec3UnitSphere*(): Vec3 =
         if v.lengthSquared < 1.0:
             return v
 
+proc randVec3UnitDisc*(): Vec3 =
+    while true:
+        var v = randVec3()
+        v.z = 0.0
+        if v.lengthSquared < 1.0:
+            return v
+
 proc randUnitVec3*(): Vec3 =
     randVec3UnitSphere().unit
 
