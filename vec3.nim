@@ -80,3 +80,9 @@ proc nearZero*(v: Vec3): bool =
 
 proc reflect*(v, n: Vec3): Vec3 =
     v - 2.0*dot(v, n)*n
+
+proc refract*(v, n: Vec3, etaiOverEtat: float): Vec3 =
+    let cosTheta = min(dot(-v, n), 1.0)
+    let rOutPerpendicular = etaiOverEtat * (v + cosTheta*n)
+    let rOutParallel = -sqrt(abs(1.0 - rOutPerpendicular.lengthSquared)) * n
+    result = rOutPerpendicular + rOutParallel

@@ -5,7 +5,7 @@ type
     HitRecord* = object
         p*, normal*: Vec3
         t*: float
-        frontFace: bool
+        frontFace*: bool
         material*: Material
 
     Hittable* = ref object of RootObj
