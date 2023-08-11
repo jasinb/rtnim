@@ -8,7 +8,7 @@ type
         lensRadius: float
 
 
-proc initCamera*(origin, lookAt, up: Vec3, vFov, aspectRatio, aperture, focusDist: float): Camera =
+proc initCamera*(origin, lookAt, up: Vec3, vFov, aspectRatio, defocusAngle, focusDist: float): Camera =
     let theta = degToRad(vFov)
     let h = tan(theta/2)
     let viewportHeight = 2.0 * h
@@ -22,7 +22,7 @@ proc initCamera*(origin, lookAt, up: Vec3, vFov, aspectRatio, aperture, focusDis
     result.horizontal = focusDist * viewportWidth * result.u
     result.vertical = focusDist * viewportHeight * result.v
     result.lowerLeftCorner = origin - result.horizontal/2.0 - result.vertical/2.0 - focusDist*result.w
-    result.lensRadius = aperture / 2
+    result.lensRadius = focusDist * tan(degToRad(defocusAngle / 2))
 
 proc getRay*(c: Camera, s, t: float): Ray =
     let rd = c.lensRadius * randVec3UnitDisc()
