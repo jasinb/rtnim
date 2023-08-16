@@ -8,7 +8,6 @@ import std/times
 import lambertian
 import metal
 import dielectric
-import std/math
 
 var rayCount = 0
 
